@@ -90,8 +90,11 @@ async def on_message(message):
     if "Jordan Peterson" in message.content or "jordan peterson" in message.content:
         emoji = "🦞"
         await message.add_reaction(emoji)
+try:
+    asyncio.set_event_loop_policy(asyncio.WindowsSelectorEventLoopPolicy())
+except:
+    pass
 
-asyncio.set_event_loop_policy(asyncio.WindowsSelectorEventLoopPolicy())
 bot.run(TOKEN)
 
 
