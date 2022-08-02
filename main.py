@@ -18,7 +18,7 @@ bot = commands.Bot(intents=nextcord.Intents.all())
 @bot.event
 async def on_ready():
     print(f"nextcord = {nextcord.__version__}")
-    print(f'We have logged in as {bot.user}')
+    print(f"We have logged in as {bot.user}")
 
 @bot.event
 async def on_application_command_error(inter: nextcord.Interaction, error):
