@@ -11,14 +11,14 @@ from atriconfig import TENOR_API_KEY, headers
 
 async def get_gif_from_tenor(search_term):
     search_term = randomize_search(search_term)
-    lmt = 1
+    lmt = 5
     ckey = "ATRI"
     async with aiohttp.ClientSession() as session:
         async with session.get(
                 f'https://tenor.googleapis.com/v2/search?q={search_term}&key={TENOR_API_KEY}&client_key={ckey}&limit={lmt}') as r:
             if r.status == 200:
                 top_gifs = json.loads(await r.text())
-                gif = top_gifs["results"][0]["url"]
+                gif = top_gifs["results"][random.randint(1,4)]["url"]
             else:
                 gif = None
     return gif

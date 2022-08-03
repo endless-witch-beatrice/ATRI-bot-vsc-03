@@ -29,7 +29,7 @@ async def on_application_command_error(inter: nextcord.Interaction, error):
         await inter.send(f"{error}", ephemeral=True, delete_after=10)
 
 @bot.slash_command(guild_ids=GUILD_IDS, name ="yea_or_nay", description="Atri responds with either YES or NO")
-@cooldowns.cooldown(2, 90, bucket=cooldowns.SlashBucket.author)
+@cooldowns.cooldown(4, 90, bucket=cooldowns.SlashBucket.author)
 async def yesno(interaction: Interaction):
     await interaction.send(file=nextcord.File(random.choice(yes_or_no)))
 
@@ -71,7 +71,7 @@ async def headpat(interaction: Interaction,
         await interaction.followup.send(random.choice(headpats[key]))
 
 @bot.slash_command(guild_ids=GUILD_IDS, name ="cute_gif", description="Atri fetches a random gif for you")
-@cooldowns.cooldown(2, 90, bucket=cooldowns.SlashBucket.author)
+@cooldowns.cooldown(4, 90, bucket=cooldowns.SlashBucket.author)
 async def cute_gif(interaction: Interaction, search_term:str = SlashOption(required=False)):
     await interaction.response.send_message(await get_gif_from_tenor(search_term))
 
