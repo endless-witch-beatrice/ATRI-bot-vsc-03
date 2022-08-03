@@ -43,7 +43,7 @@ async def goodnight(interaction: Interaction, user:nextcord.Member = SlashOption
     elif user == bot.user:
         await interaction.send(f"Apologies, I don't want to sleep yet.", ephemeral=True, delete_after=10)
     else:
-        await interaction.response.send_message(f"Sweet dreams, {user.name}")
+        await interaction.response.send_message(f"Sweet dreams, {user.name}!")
         await interaction.followup.send(random.choice(g_nightgifs["regular goodnight"]))
 
 @bot.slash_command(guild_ids=GUILD_IDS, name = "headpat", description="Atri headpats a user with a gif")
@@ -66,7 +66,7 @@ async def headpat(interaction: Interaction,
         await interaction.response.send_message(f"{interaction.user.name} pat-pats themselves.")
         await interaction.followup.send(random.choice(headpats["self"]))   
     else:
-        await interaction.response.send_message(f"{interaction.user.name} pat-pats {user.name}")
+        await interaction.response.send_message(f"{interaction.user.name} pat-pats {user.name}.")
         await interaction.followup.send(random.choice(headpats[key]))
 
 @bot.slash_command(guild_ids=GUILD_IDS, name ="cute_gif", description="Atri fetches a random gif for you")
@@ -104,9 +104,9 @@ async def hug(interaction: Interaction,
         await interaction.followup.send(random.choice(hugs["self"]))   
     else:
         if key == "ask":
-            await interaction.response.send_message(f"{interaction.user.name} offers a hug to {user.name}")
+            await interaction.response.send_message(f"{interaction.user.name} offers a hug to {user.name}.")
         else:
-            await interaction.response.send_message(f"{interaction.user.name} hugs {user.name}")
+            await interaction.response.send_message(f"{interaction.user.name} hugs {user.name}.")
         await interaction.followup.send(random.choice(hugs[key]))
 
 @bot.listen()
