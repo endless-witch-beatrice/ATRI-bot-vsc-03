@@ -2,7 +2,6 @@ import json
 import random
 import aiohttp, asyncio
 
-
 import nextcord
 from nextcord import Interaction, SlashOption
 from nextcord.ext import commands
@@ -42,13 +41,13 @@ async def goodnight(interaction: Interaction, user:nextcord.Member = SlashOption
         await interaction.response.send_message(f"{user.name} is going to bed :sleeping:")
         await interaction.followup.send(random.choice(g_nightgifs["goodnight user self"]))
     elif user == bot.user:
-        await interaction.send(f"Apologies, ATRI dosen't want to sleep yet.", ephemeral=True, delete_after=10)
+        await interaction.send(f"Apologies, I don't want to sleep yet.", ephemeral=True, delete_after=10)
     else:
-        await interaction.response.send_message(f"Sweet dreams, {user.mention}")
+        await interaction.response.send_message(f"Sweet dreams, {user.name}")
         await interaction.followup.send(random.choice(g_nightgifs["regular goodnight"]))
 
 @bot.slash_command(guild_ids=GUILD_IDS, name = "headpat", description="Atri headpats a user with a gif")
-@cooldowns.cooldown(2, 90, bucket=cooldowns.SlashBucket.author)
+@cooldowns.cooldown(3, 90, bucket=cooldowns.SlashBucket.author)
 async def headpat(interaction: Interaction,
                   user: nextcord.Member = SlashOption(name="username", description="whom do you want to pat? (optional)", required=False),
                   headpat_type:str = SlashOption(name="secret_code", description="don't touch this option, unless...", required=False)):
@@ -67,7 +66,7 @@ async def headpat(interaction: Interaction,
         await interaction.response.send_message(f"{interaction.user.name} pat-pats themselves.")
         await interaction.followup.send(random.choice(headpats["self"]))   
     else:
-        await interaction.response.send_message(f"{interaction.user.name} pat-pats {user.mention}")
+        await interaction.response.send_message(f"{interaction.user.name} pat-pats {user.name}")
         await interaction.followup.send(random.choice(headpats[key]))
 
 @bot.slash_command(guild_ids=GUILD_IDS, name ="cute_gif", description="Atri fetches a random gif for you")
@@ -81,6 +80,34 @@ async def anime_maid(interaction: Interaction):
     await interaction.response.defer()
     data = await get_maid_data()
     await interaction.send(file=nextcord.File(data, 'cutemaid.jpg'))
+
+@bot.slash_command(guild_ids=GUILD_IDS, name = "hug", description="Atri hugs a user with a gif")
+@cooldowns.cooldown(3, 90, bucket=cooldowns.SlashBucket.author)
+async def hug(interaction: Interaction,
+                  user: nextcord.Member = SlashOption(name="username", description="who do you want to cuddle with?", required=False),
+                  hug_type:str = SlashOption(name="secret_code", description="don't touch this option, unless...", required=False)):
+
+    with open('images-atri/huggifs.json') as f:
+        hugs = json.load(f)
+
+    key = "regularhugs"
+    if (hug_type == "toy") or (hug_type == "ask") or (hug_type == "dog") or (hug_type == "cat"):
+        key = hug_type
+
+    if user is None:
+        await interaction.response.send_message(random.choice(hugs[key]))
+    elif user == bot.user:
+        await interaction.response.send_message(f"Apologies, {interaction.user.name}, I don't want to be hugged.")
+        await interaction.followup.send(random.choice(hugs["failed"]))
+    elif user == interaction.user:
+        await interaction.response.send_message(f"{interaction.user.name} practices self-love by hugging themselves.")
+        await interaction.followup.send(random.choice(hugs["self"]))   
+    else:
+        if key == "ask":
+            await interaction.response.send_message(f"{interaction.user.name} offers a hug to {user.name}")
+        else:
+            await interaction.response.send_message(f"{interaction.user.name} hugs {user.name}")
+        await interaction.followup.send(random.choice(hugs[key]))
 
 @bot.listen()
 async def on_message(message):
