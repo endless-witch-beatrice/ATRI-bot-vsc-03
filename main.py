@@ -46,29 +46,6 @@ async def goodnight(interaction: Interaction, user:nextcord.Member = SlashOption
         await interaction.response.send_message(f"Sweet dreams, {user.name}!")
         await interaction.followup.send(random.choice(g_nightgifs["regular goodnight"]))
 
-@bot.slash_command(guild_ids=GUILD_IDS, name = "headpat", description="Atri headpats a user with a gif")
-@cooldowns.cooldown(3, 90, bucket=cooldowns.SlashBucket.author)
-async def headpat(interaction: Interaction,
-                  user: nextcord.Member = SlashOption(name="username", description="whom do you want to pat? (optional)", required=False),
-                  headpat_type:str = SlashOption(name="secret_code", description="don't touch this option, unless...", required=False)):
-
-    with open('images-atri/headpatgifs.json') as f:
-        headpats = json.load(f)
-
-    key = choose_headpat(headpat_type)
-
-    if user is None:
-        await interaction.response.send_message(random.choice(headpats[key]))
-    elif user == bot.user:
-        await interaction.response.send_message(f"{interaction.user.name} pat-pats me :blush: ")
-        await interaction.followup.send(random.choice(headpats["robot"]))
-    elif user == interaction.user:
-        await interaction.response.send_message(f"{interaction.user.name} pat-pats themselves.")
-        await interaction.followup.send(random.choice(headpats["self"]))   
-    else:
-        await interaction.response.send_message(f"{interaction.user.name} pat-pats {user.name}.")
-        await interaction.followup.send(random.choice(headpats[key]))
-
 @bot.slash_command(guild_ids=GUILD_IDS, name ="cute_gif", description="Atri fetches a random gif for you")
 @cooldowns.cooldown(4, 90, bucket=cooldowns.SlashBucket.author)
 async def cute_gif(interaction: Interaction, search_term:str = SlashOption(required=False)):
@@ -90,9 +67,10 @@ async def hug(interaction: Interaction,
     with open('images-atri/huggifs.json') as f:
         hugs = json.load(f)
 
-    key = "regularhugs"
-    if (hug_type == "toy") or (hug_type == "ask") or (hug_type == "dog") or (hug_type == "cat"):
+    if hug_type in ("toy", "ask", "dog", "cat"):
         key = hug_type
+    else:
+        key = "regularhugs"
 
     if user is None:
         await interaction.response.send_message(random.choice(hugs[key]))
@@ -108,6 +86,46 @@ async def hug(interaction: Interaction,
         else:
             await interaction.response.send_message(f"{interaction.user.name} hugs {user.name}.")
         await interaction.followup.send(random.choice(hugs[key]))
+
+@bot.slash_command(guild_ids=GUILD_IDS, name ="good_morning", description="Atri sends a good morning wish to a user")
+@cooldowns.cooldown(1, 90, bucket=cooldowns.SlashBucket.author)
+async def goodmorning(interaction: Interaction, user:nextcord.Member = SlashOption(name="username", description="choose a sleepy user", required=True)):
+    with open('images-atri/goodmorninggifs.json') as f:
+        g_morninggifs = json.load(f)
+    if user == interaction.user:
+        await interaction.response.send_message(f"{user.name} is waking up :face_with_hand_over_mouth: ")
+        await interaction.followup.send(random.choice(g_morninggifs["goodmorning user self"]))
+    elif user == bot.user:
+        await interaction.send(f"Don't talk to me until I've had my coffee :robot: :coffee:", ephemeral=True, delete_after=10)
+    else:
+        await interaction.response.send_message(f"Good morning, {user.name}!")
+        await interaction.followup.send(random.choice(g_morninggifs["regular goodmorning"]))
+
+@bot.slash_command(guild_ids=GUILD_IDS, name = "headpat", description="Atri headpats a user with a gif")
+@cooldowns.cooldown(3, 90, bucket=cooldowns.SlashBucket.author)
+async def headpat(interaction: Interaction,
+                  user: nextcord.Member = SlashOption(name="username", description="whom do you want to pat? (optional)", required=False),
+                  headpat_type:str = SlashOption(name="secret_code", description="don't touch this option, unless...", required=False)):
+
+    with open('images-atri/headpatgifs.json') as f:
+        headpats = json.load(f)
+
+    if headpat_type in ("comfort", "tiny", "goodgirl", "boy", "pig", "cat", "dog", "humangirl"):
+        key = headpat_type
+    else: 
+        key = "ordinary pat-pats"
+
+    if user is None:
+        await interaction.response.send_message(random.choice(headpats[key]))
+    elif user == bot.user:
+        await interaction.response.send_message(f"{interaction.user.name} pat-pats me :blush: ")
+        await interaction.followup.send(random.choice(headpats["robot"]))
+    elif user == interaction.user:
+        await interaction.response.send_message(f"{interaction.user.name} pat-pats themselves.")
+        await interaction.followup.send(random.choice(headpats["self"]))   
+    else:
+        await interaction.response.send_message(f"{interaction.user.name} pat-pats {user.name}.")
+        await interaction.followup.send(random.choice(headpats[key]))
 
 @bot.listen()
 async def on_message(message):

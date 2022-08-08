@@ -23,32 +23,6 @@ async def get_gif_from_tenor(search_term):
                 gif = None
     return gif
 
-def choose_headpat(headpat_type):
-
-    match headpat_type:
-        case "comfort":
-            key = "comfort pat"
-        case "pig":
-            key = "pig"
-        case "goodgirl":
-            key = "good girl"
-        case "boy":
-            key = "boy patted"
-        case "tiny":
-            key = "tiny"
-        case "robot":
-            key = "robot"
-        case "dog":
-            key = "dog"
-        case "cat":
-            key = "cat"
-        case "3dgirl":
-            key = "human girl"
-        case _:
-            key = "ordinary pat-pats"
-
-    return key
-
 def randomize_search(search_term):
     if search_term is None:
         search_term = f"{random.choice(ascii_lowercase)} cute anime {str(random.randint(0, 20))} "
