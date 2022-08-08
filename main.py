@@ -10,7 +10,7 @@ import cooldowns
 from cooldowns import CallableOnCooldown
 
 from atriconfig import GUILD_IDS, yes_or_no, TOKEN
-from functions import choose_headpat, get_gif_from_tenor, get_maid_data
+from functions import get_gif_from_tenor, get_maid_data
 
 bot = commands.Bot(intents=nextcord.Intents.all())
 
