@@ -129,12 +129,22 @@ async def headpat(interaction: Interaction,
 
 @bot.listen()
 async def on_message(message):
+    streamcord_id = 375805687529209857
+    streamcord_msg = "We're live at https://twitch.tv/nezumicraft"
+    if message.author.id == streamcord_id and streamcord_msg in message.content:
+        emoji = "👍"
+        await message.add_reaction(emoji)
+        watching_nezu = nextcord.Activity(type=nextcord.ActivityType.watching, name = "twitch.tv/nezumicraft")
+        await bot.change_presence(status=nextcord.Status.dnd, activity=watching_nezu)
+        await asyncio.sleep(9000)
+        await bot.change_presence(status=nextcord.Status.online, activity=None)
     if "crab" in message.content:
         emoji = "🦀"
         await message.add_reaction(emoji)
     if "Jordan Peterson" in message.content or "jordan peterson" in message.content:
         emoji = "🦞"
         await message.add_reaction(emoji)
+
 try:
     asyncio.set_event_loop_policy(asyncio.WindowsSelectorEventLoopPolicy())
 except:
