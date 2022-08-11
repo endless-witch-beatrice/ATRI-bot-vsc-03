@@ -27,6 +27,20 @@ async def on_application_command_error(inter: nextcord.Interaction, error):
     else:
         await inter.send(f"{error}", ephemeral=True, delete_after=10)
 
+async def atri_sleep(interaction: Interaction, gif_atri_sleep:str):
+    await interaction.response.send_message("I'm off to bed.  :robot: :zzz: ")
+    await interaction.followup.send(gif_atri_sleep)
+    await bot.change_presence(status=nextcord.Status.offline, activity=None)
+    global is_invizible
+    is_invizible = False
+
+async def atri_wake_up(interaction: Interaction, gif_atri_wakingup:str):
+    await interaction.response.send_message("Rising up for a new day.  :robot: :coffee:")
+    await interaction.followup.send(gif_atri_wakingup)
+    await bot.change_presence(status=nextcord.Status.online, activity=None)
+    global is_invizible
+    is_invizible = True
+
 @bot.slash_command(guild_ids=GUILD_IDS, name ="yea_or_nay", description="Atri responds with either YES or NO")
 @cooldowns.cooldown(4, 90, bucket=cooldowns.SlashBucket.author)
 async def yesno(interaction: Interaction):
@@ -41,7 +55,8 @@ async def goodnight(interaction: Interaction, user:nextcord.Member = SlashOption
         await interaction.response.send_message(f"{user.name} is going to bed :sleeping:")
         await interaction.followup.send(random.choice(g_nightgifs["goodnight user self"]))
     elif user == bot.user:
-        await interaction.send(f"Apologies, I don't want to sleep yet.", ephemeral=True, delete_after=10)
+        """ await interaction.send(f"Apologies, I don't want to sleep yet.", ephemeral=True, delete_after=10) """
+        await atri_sleep(interaction, random.choice(g_nightgifs["atri"]))
     else:
         await interaction.response.send_message(f"Sweet dreams, {user.name}!")
         await interaction.followup.send(random.choice(g_nightgifs["regular goodnight"]))
@@ -96,7 +111,8 @@ async def goodmorning(interaction: Interaction, user:nextcord.Member = SlashOpti
         await interaction.response.send_message(f"{user.name} is waking up :face_with_hand_over_mouth: ")
         await interaction.followup.send(random.choice(g_morninggifs["goodmorning user self"]))
     elif user == bot.user:
-        await interaction.send(f"Don't talk to me until I've had my coffee :robot: :coffee:", ephemeral=True, delete_after=10)
+        """ await interaction.send(f"Don't talk to me until I've had my coffee :robot: :coffee:", ephemeral=True, delete_after=10) """
+        await atri_wake_up(interaction, random.choice(g_morninggifs["atri"]))
     else:
         await interaction.response.send_message(f"Good morning, {user.name}!")
         await interaction.followup.send(random.choice(g_morninggifs["regular goodmorning"]))
@@ -136,8 +152,10 @@ async def on_message(message):
         await message.add_reaction(emoji)
         watching_nezu = nextcord.Activity(type=nextcord.ActivityType.watching, name = "twitch.tv/nezumicraft")
         await bot.change_presence(status=nextcord.Status.dnd, activity=watching_nezu)
-        await asyncio.sleep(9000)
+        await asyncio.sleep(11000)
         await bot.change_presence(status=nextcord.Status.online, activity=None)
+        global is_invizible
+        is_invizible = False
     if "crab" in message.content:
         emoji = "🦀"
         await message.add_reaction(emoji)
@@ -150,6 +168,7 @@ try:
 except:
     pass
 
+is_invizible = False
 bot.run(TOKEN)
 
 
