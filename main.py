@@ -55,7 +55,6 @@ async def goodnight(interaction: Interaction, user:nextcord.Member = SlashOption
         await interaction.response.send_message(f"{user.name} is going to bed :sleeping:")
         await interaction.followup.send(random.choice(g_nightgifs["goodnight user self"]))
     elif user == bot.user:
-        """ await interaction.send(f"Apologies, I don't want to sleep yet.", ephemeral=True, delete_after=10) """
         await atri_sleep(interaction, random.choice(g_nightgifs["atri"]))
     else:
         await interaction.response.send_message(f"Sweet dreams, {user.name}!")
@@ -152,7 +151,7 @@ async def on_message(message):
         await message.add_reaction(emoji)
         watching_nezu = nextcord.Activity(type=nextcord.ActivityType.watching, name = "twitch.tv/nezumicraft")
         await bot.change_presence(status=nextcord.Status.dnd, activity=watching_nezu)
-        await asyncio.sleep(11000)
+        await asyncio.sleep(9700)
         await bot.change_presence(status=nextcord.Status.online, activity=None)
         global is_invizible
         is_invizible = False
